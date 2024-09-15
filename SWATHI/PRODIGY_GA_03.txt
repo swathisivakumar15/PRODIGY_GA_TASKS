@@ -1,0 +1,161 @@
+CODE
+
+text_a = open("/content/poem1.csv").read()
+text_b = open("/content/poem2.csv").read()
+print(text_a[:200])
+import random
+random.sample(text_b, 20)
+a_words = text_a.split()
+b_words = text_b.split()
+random.sample(a_words, 10)
+random.sample(b_words, 10)
+from collections import Counter
+Counter(text_a).most_common(12)
+Counter(a_words).most_common(12)
+Counter(b_words).most_common(12)
+import sys
+!{sys.executable} -m pip install markovify
+import markovify
+generator_a = markovify.Text(text_a)
+print(generator_a.make_sentence())
+print(generator_a.make_short_sentence(50))
+print(generator_a.make_short_sentence(40, tries=100))
+print(generator_a.make_short_sentence(40, test_output=False))
+gen_a_1 = markovify.Text(text_a, state_size=1)
+gen_a_4 = markovify.Text(text_a, state_size=4)
+print("order 1")
+print(gen_a_1.make_sentence(test_output=False))
+print()
+print("order 4")
+print(gen_a_4.make_sentence(test_output=False))
+class SentencesByChar(markovify.Text):
+    def word_split(self, sentence):
+        return list(sentence)
+    def word_join(self, words):
+        return "".join(words)
+con_model = SentencesByChar("condescendences", state_size=2)
+con_model.make_sentence()
+gen_a_char = SentencesByChar(text_a, state_size=7)
+print(gen_a_char.make_sentence(test_output=False).replace("\n", " "))
+
+generator_a = markovify.Text(text_a)
+generator_b = markovify.Text(text_b)
+combo = markovify.combine([generator_a, generator_b], [0.5, 0.5])
+print(combo.make_sentence())
+# change to "word" for a word-level model
+level = "char"
+# controls the length of the n-gram
+order = 7
+# controls the number of lines to output
+output_n = 14
+# weights between the models; text A first, text B second.
+# if you want to completely exclude one model, set its corresponding value to 0
+weights = [0.5, 0.5]
+# limit sentence output to this number of characters
+length_limit = 280
+model_cls = markovify.Text if level == "word" else SentencesByChar
+gen_a = model_cls(text_a, state_size=order)
+gen_b = model_cls(text_b, state_size=order)
+gen_combo = markovify.combine([gen_a, gen_b], weights)
+for i in range(output_n):
+    out = gen_combo.make_short_sentence(length_limit, test_output=False)
+    out = out.replace("\n", " ")
+    print(out)
+    print()
+sonnets_text = open("/content/poem2.csv").read()
+sonnets_model = markovify.NewlineText(sonnets_text, state_size=1)
+sonnets_model.make_sentence()
+for i in range(14):
+    print(sonnets_model.make_sentence())
+class LinesByChar(markovify.NewlineText):
+    def word_split(self, sentence):
+        return list(sentence)
+    def word_join(self, words):
+        return "".join(words)
+sonnets_char_model = LinesByChar(sonnets_text, state_size=4)
+for i in range(14):
+    print(sonnets_char_model.make_sentence())
+'''import json
+mood_data = json.loads(open("/content/poem3.csv").read())
+moods = mood_data['moods']
+moods_text = "\n".join(moods)
+moods_char_model = LinesByChar(moods_text, state_size=3)
+for i in range(24):
+    print(moods_char_model.make_sentence())'''
+
+OUTPUT
+
+Tis better to be vile than vile esteemed,
+When not to be receives reproach of being;
+And the just pleasure lost, which is so deemed
+Not by our feeling, but by others' seeing:
+For why should others' f
+Requirement already satisfied: markovify in /usr/local/lib/python3.10/dist-packages (0.9.4)
+Requirement already satisfied: unidecode in /usr/local/lib/python3.10/dist-packages (from markovify) (1.3.8)
+None
+None
+None
+None
+order 1
+Or on my deeds must not be shown; Unless this general evil they that I think good?
+
+order 4
+Or on my frailties why are frailer spies, Which in their wills count bad what I think good?
+No, I am that I am, and they themselves be bevel; By their rank thoughts, my deeds must not be shown; Unless this general evil they maintain, All men are bad and in their wills count bad what I think good?
+None
+Let the priest in surplice white, That defunctive music can, Be the death-divining swan, Lest the requiem lack his right.
+
+Property was thus appall'd, That defunctive music can, Be the death-divining swan, Lest the requiem lack his right.
+
+Beauty, truth, and rarity.
+
+Let the priest in surplice white, That defunctive music can, Be the death-divining swan, Lest the requiem lack his right.
+
+So they lov'd, as love in twain Had the essence but in one; Two distincts, division grow together; To the phoenix and they that level At my abuses reckon up their badness reign.
+
+To this threne To the phoenix and the dove, Co-supreme and stars of love; As chorus to their rank though they themselves be bevel; By their wills count bad what I think good?
+
+From this session interdict Every fowl of tyrant wing, Save the eagle, feather'd king: Keep the obsequy so strict.
+
+Property was thus appall'd, That the same; Single nature's double name Neither two nor one was call'd.
+
+From this session interdict Every fowl of tyrant wing, Save the eagle, feather'd king: Keep the obsequy so strict.
+
+From this session interdict Every fowl of tyrant wing, Save the eagle, feather'd king: Keep the obsequy so strict.
+
+Let the priest in surplice white, That defunctive music can, Be the death-divining swan, Lest the requiem lack his right.
+
+That it cried how true a twain Seemeth this concordant one!
+
+Beauty, truth, and rarity.
+
+So they lov'd, as love in twain Seemeth this concordant one!
+
+Foul pre-currer of the essence but cannot be:
+Every fowl of love;
+That the turtle's loyal breast
+So between them love was not the obsequy so remain.
+Grace in itself confounded,
+And thou, shrieking harbinger,
+Whereupon it were so well compounded.
+That the anthem doth commence:
+Distance, and constancy is dead;
+Leaving no space was seen
+In a prayer.
+Co-supreme and no posterity:-
+Lest the other's mine.
+Seemeth this troop come thou not asunder;
+Either the dove,
+That the essence:
+For the and be.
+From this confound concordant one was not asunded.
+With thou, true a wonder mak'st
+To the requiem love;
+Property was slain.
+To the self concordant one;
+Reason, in cinder mak'st,
+Keep ther tragic scene.
+Love hath the and no posterity.
+For these death-division none
+Keep the so well come ther,
+As chorus to this seen
