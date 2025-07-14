@@ -1,4 +1,4 @@
-# PRODIGY_GA_TASKS
+# GEN - AI PROJECTS
 TASK 1-GPT-2: The Fine-Tuning of the OpenAI Model to Make Text This is a tuned version on its specific data set, generating contextual text and coherent sentences through the use of the GPT-2 model-an OpenAI model.
 
 TASK 2-This project creates images based on a text prompt using pre-trained generative models - DALL-E-mini or Stable Diffusion for instance. In that regard, this then shows how language can be translated into visual content.
